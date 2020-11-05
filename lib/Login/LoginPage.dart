@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_autentication_facebook_google/Pages/HomePage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 
 Future<UserCredential> signInWithFacebook() async {
   // Trigger the sign-in flow
@@ -16,6 +18,7 @@ Future<UserCredential> signInWithFacebook() async {
     print("""
     login
     $e
+    ${e.toString()}
     """);
   }
   // Create a credential from the access token
@@ -29,6 +32,7 @@ Future<UserCredential> signInWithFacebook() async {
       print("""
       credential
       $e
+    ${e.toString()}
       """);
     }
 
@@ -42,6 +46,7 @@ Future<UserCredential> signInWithFacebook() async {
       print("""
       signInWithCredential
       $e
+    ${e.toString()}
       """);
     }
   return userFinal;
@@ -62,6 +67,7 @@ Future<UserCredential> signInWithGoogle() async {
 
   // Once signed in, return the UserCredential
   return await FirebaseAuth.instance.signInWithCredential(credential);
+  
 }
 
 
@@ -69,7 +75,9 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
-
+// FirebaseApp defaultApp = await Firebase.initializeApp();
+// FirebaseAuth user = FirebaseAuth.instanceFor(app: defaultApp);
+// checkIfUserIsSignedIn();
 
 class _LoginPageState extends State<LoginPage> {
 
@@ -79,24 +87,47 @@ class _LoginPageState extends State<LoginPage> {
   // FirebaseApp secondaryApp = Firebase.app('SecondaryApp');
   // FirebaseAuth auth = FirebaseAuth.instanceFor(app: secondaryApp);
   
-    
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
        body: Container(
+         color: Colors.grey[100],
+         width: double.infinity,
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
+           crossAxisAlignment: CrossAxisAlignment.center,
            children: [
-             RaisedButton(
-               onPressed: () {
-                 signInWithGoogle();
+             FlatButton(
+               color: Colors.white,
+
+               shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+               onPressed: () async {
+                 UserCredential userCred = await signInWithGoogle();
+                 User user = userCred.user;
+                 Navigator.pushAndRemoveUntil(
+                   context,MaterialPageRoute(
+                     builder: (BuildContext context) => HomePage(user: user,)),
+                      ModalRoute.withName('/home'),);
                },
                child: Text("Sign in with Google"),
              ),
-             RaisedButton(
-               onPressed: () {
-                 signInWithFacebook();
+             FlatButton(
+               color: Colors.blue,
+               textColor: Colors.white,
+               shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+               onPressed: () async {
+                 UserCredential userCred = await signInWithFacebook();
+                 User user = userCred.user;
+                 Navigator.pushAndRemoveUntil(
+                   context,MaterialPageRoute(
+                     builder: (BuildContext context) => HomePage(user: user,)),
+                      ModalRoute.withName('/home'),);
                },
                child: Text("Sign in with Facebook"),
              ),

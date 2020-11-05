@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_autentication_facebook_google/Login/LoginPage.dart';
+import 'package:flutter_autentication_facebook_google/Pages/HomePage.dart';
+import 'package:flutter_autentication_facebook_google/Pages/SplashScreen.dart';
 import 'package:flutter_autentication_facebook_google/src/provider/Push_notification_provider.dart';
  
 void main() async {
@@ -27,7 +29,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      home: LoginPage()
+      initialRoute: "/splash",
+      routes: {
+        "/splash" : (_) => SplashScreen(),
+        "/login" : (_)=>LoginPage(),
+        "/home" : (_)=>HomePage(),
+      },
     );
   }
 }
